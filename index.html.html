@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCC Attendance System - Mobile</title>
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .login-container {
+            max-width: 90%;
+            margin: 50px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .login-container h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .login-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            display: none; /* Hidden initially */
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 3px;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 8px 15px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8em;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.8em;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            border-bottom: 1px solid #eee;
+            padding: 8px 10px;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .cadet-card {
+            background: #f9f9f9;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cadet-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .cadet-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .cadet-year {
+            background: #667eea;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .custom-checkbox:checked {
+            accent-color: #27ae60;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .status-present {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-absent {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .button-group button {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .delete-btn {
+            background: #e74c3c !important;
+        }
+
+        .delete-btn:hover {
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4) !important;
+        }
+
+        .export-btn {
+            background: #27ae60 !important;
+        }
+
+        .export-btn:hover {
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4) !important;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            font-size: 0.7em;
+            opacity: 0.9;
+        }
+
+        .filter-section {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 30px 15px;
+        }
+
+        .empty-state svg {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .attendance-year-content {
+            display: none;
+        }
+
+        .attendance-year-content.active {
+            display: block;
+        }
+
+        .date-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            align-items: end;
+        }
+
+        @media (max-width: 768px) {
+            .date-range {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .attendance-summary {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-date {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9em;
+        }
+
+        .summary-status {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Additional mobile enhancements */
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .login-container {
+                padding: 20px 15px;
+            }
+            .login-container h1 {
+                font-size: 1.5em;
+            }
+            .section {
+                padding: 10px;
+            }
+            .tabs {
+                gap: 3px;
+            }
+            .tab-btn {
+                padding: 6px 10px;
+                font-size: 0.7em;
+                min-width: 60px;
+            }
+            .cadet-card {
+                padding: 8px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .checkbox-wrapper {
+                align-self: flex-end;
+            }
+            .button-group button {
+                padding: 8px 15px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <h1>🔐 NCC Attendance Login</h1>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p style="margin-top: 15px; color: #666; font-size: 0.8em;">Access restricted to authorized personnel only.</p>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <header>
+            <h1>🎖️ NCC Attendance System</h1>
+            <p>Track attendance for 1st Year and 2nd Year Cadets</p>
+            <div style="margin-top: 8px;">
+                <button onclick="logout()" style="padding: 4px 12px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.8em;">Logout</button>
+            </div>
+        </header>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('home')">Home</button>
+            <button class="tab-btn" onclick="switchTab('add')">Add Cadets</button>
+            <button class="tab-btn" onclick="switchTab('record')">Take Attendance</button>
+            <button class="tab-btn" onclick="switchTab('view')">View Records</button>
+            <button class="tab-btn" onclick="switchTab('stats')">Statistics</button>
+        </div>
+
+        <!-- Home Tab -->
+        <div id="home-tab" class="tab-content active section">
+            <h2>🏠 Welcome to NCC Attendance System</h2>
+            <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">Manage cadet attendance efficiently with our comprehensive system.</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; border-radius: 10px; text-align: center;">
+                    <h3 style="margin-bottom: 8px; font-size: 0.9em;">👥 Total Cadets</h3>
+                    <div style="font-size: 1.8em; font-weight: bold;" id="totalCadets">0</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 15px; border-radius: 10px; text-align: center;">
+                    <h3 style="margin-bottom: 8px; font-size: 0.9em;">📅 Today's Attendance</h3>
+                    <div style="font-size: 1.8em; font-weight: bold;" id="todayAttendance">--</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; padding: 15px; border-radius: 10px; text-align: center;">
+                    <h3 style="margin-bottom: 8px; font-size: 0.9em;">📊 Overall Rate</h3>
+                    <div style="font-size: 1.8em; font-weight: bold;" id="overallRate">--</div>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1em;">🎖️ Rank Panel</h3>
+                <div id="rankPanel" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                    <!-- Rank panels will be populated here -->
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1em;">📈 Quick Actions</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                    <button onclick="switchTab('add')" style="padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8em;">
+                        ➕ Add New Cadet
+                    </button>
+                    <button onclick="switchTab('record')" style="padding: 12px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8em;">
+                        📝 Take Attendance
+                    </button>
+                    <button onclick="switchTab('view')" style="padding: 12px; background: #6f42c1; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8em;">
+                        📋 View Records
+                    </button>
+                    <button onclick="switchTab('stats')" style="padding: 12px; background: #fd7e14; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8em;">
+                        📊 View Statistics
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Cadets Tab -->
+        <div id="add-tab" class="tab-content active section">
+            <h2>👥 Add/Edit Cadet</h2>
+            <form id="addCadetForm">
+                <div class="form-group">
+                    <label for="cadetName">Cadet Name *</label>
+                    <input type="text" id="cadetName" required placeholder="Enter cadet name">
+                </div>
+                <div class="form-group">
+                    <label for="year">Year *</label>
+                    <select id="year" required>
+                        <option value="">Select Year</option>
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rank">Rank</label>
+                    <select id="rank">
+                        <option value="Cadet">Cadet</option>
+                        <option value="Lance Corporal">Lance Corporal</option>
+                        <option value="Corporal">Corporal</option>
+                        <option value="Sergeant">Sergeant</option>
+                        <option value="Company Sergeant Major">Company Sergeant Major</option>
+                    </select>
+                </div>
+                <input type="hidden" id="editingCadetId" value="">
+                <button type="submit" id="submitBtn">Add Cadet</button>
+                <button type="button" id="cancelBtn" style="display: none; background: #95a5a6 !important;" onclick="cancelEdit()">Cancel Edit</button>
+            </form>
+
+            <h2 style="margin-top: 20px;">Cadet List</h2>
+            <div id="cadetsList"></div>
+        </div>
+
+        <!-- Take Attendance Tab -->
+        <div id="record-tab" class="tab-content section">
+            <h2>✅ Take Attendance</h2>
+
+            <div class="form-group">
+                <label for="attendanceDate">Select Date *</label>
+                <input type="date" id="attendanceDate" required>
+            </div>
+
+            <!-- Year Tabs for Attendance -->
+            <div class="tabs" style="margin-bottom: 15px;">
+                <button class="tab-btn active" onclick="switchAttendanceYear('1st')">1st Year Cadets</button>
+                <button class="tab-btn" onclick="switchAttendanceYear('2nd')">2nd Year Cadets</button>
+            </div>
+
+            <!-- 1st Year Attendance -->
+            <div id="attendance-1st-tab" class="attendance-year-content active">
+                <h3 style="color: #667eea; margin-bottom: 12px; font-size: 1em;">1st Year Cadets</h3>
+                <div class="filter-section">
+                    <div class="form-row">
+                        <button type="button" onclick="markAllPresentYear('1st')">✓ Mark All 1st Year Present</button>
+                        <button type="button" onclick="markAllAbsentYear('1st')">✗ Mark All 1st Year Absent</button>
+                        <button type="button" onclick="clearSelectionYear('1st')">Clear 1st Year Selection</button>
+                    </div>
+                </div>
+                <div id="attendanceList-1st"></div>
+            </div>
+
+            <!-- 2nd Year Attendance -->
+            <div id="attendance-2nd-tab" class="attendance-year-content">
+                <h3 style="color: #667eea; margin-bottom: 12px; font-size: 1em;">2nd Year Cadets</h3>
+                <div class="filter-section">
+                    <div class="form-row">
+                        <button type="button" onclick="markAllPresentYear('2nd')">✓ Mark All 2nd Year Present</button>
+                        <button type="button" onclick="markAllAbsentYear('2nd')">✗ Mark All 2nd Year Absent</button>
+                        <button type="button" onclick="clearSelectionYear('2nd')">Clear 2nd Year Selection</button>
+                    </div>
+                </div>
+                <div id="attendanceList-2nd"></div>
+            </div>
+
+            <div class="button-group">
+                <button onclick="saveAttendance()">💾 Save Attendance</button>
+            </div>
+        </div>
+
+        <!-- View Records Tab -->
+        <div id="view-tab" class="tab-content section">
+            <h2>📊 View Attendance Records</h2>
+
+            <div class="filter-section">
+                <div class="date-range">
+                    <div class="form-group">
+                        <label for="filterFromDate">From Date</label>
+                        <input type="date" id="filterFromDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="filterToDate">To Date</label>
+                        <input type="date" id="filterToDate">
+                    </div>
+                    <button onclick="filterRecords()">🔍 Filter</button>
+                </div>
+                <div style="margin-top: 12px; text-align: center;">
+                    <button onclick="exportDateRange()" style="background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; margin-right: 8px; font-size: 0.8em;">📊 Export Date Range</button>
+                    <button onclick="exportAllData()" style="background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; margin-right: 8px; font-size: 0.8em;">📈 Export All Data</button>
+                    <button onclick="exportSummary()" style="background: #f39c12; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 0.8em;">📋 Export Summary</button>
+                </div>
+            </div>
+
+            <div id="recordsDisplay"></div>
+        </div>
+
+        <!-- Statistics Tab -->
+        <div id="stats-tab" class="tab-content section">
+            <h2>📈 Attendance Statistics</h2>
+
+            <!-- Days Overview Section -->
+            <div style="margin-bottom: 20px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                <h3 style="color: #667eea; margin-bottom: 12px; font-size: 1em;">📅 Attendance Overview</h3>
+                <div id="daysOverview"></div>
+            </div>
+
+            <div id="statsDisplay"></div>
+        </div>
+    </div>
+
+    <script>
+        // Login credentials
+        const VALID_USERNAME = "ANO AJAY PRATAP SINGH";
+        const VALID_PASSWORD = "NCC7DBN";
+
+        // Check if user is logged in
+        function checkLogin() {
+            const isLoggedIn = localStorage.getItem('nccLoggedIn') === 'true';
+            if (isLoggedIn) {
+                showMainApp();
+            } else {
+                showLogin();
+            }
+        }
+
+        // Show login form
+        function showLogin() {
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('mainContainer').style.display = 'none';
+        }
+
+        // Show main application
+        function showMainApp() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'block';
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+                localStorage.setItem('nccLoggedIn', 'true');
+                showMainApp();
+                initializeApp();
+            } else {
+                alert('Invalid username or password. Access denied.');
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Logout function (can be called if needed)
+        function logout() {
+            localStorage.removeItem('nccLoggedIn');
+            showLogin();
+        }
+
+        let cadets = [];
+        let attendanceRecords = [];
+        let isOnline = false;
+
+        // Load data from localStorage
+        async function loadData() {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+
+            try {
+                statusText.textContent = 'Loading data from local storage...';
+
+                cadets = JSON.parse(localStorage.getItem('nccCadets')) || [];
+                attendanceRecords = JSON.parse(localStorage.getItem('nccAttendance')) || [];
+
+                isOnline = false; // Not using online storage
+                statusIndicator.textContent = '💾';
+                statusText.textContent = 'Local Storage Mode';
+                console.log('Data loaded from localStorage');
+            } catch (error) {
+                console.error('Error loading data from localStorage:', error);
+                cadets = [];
+                attendanceRecords = [];
+                isOnline = false;
+                statusIndicator.textContent = '❌';
+                statusText.textContent = 'Error loading data';
+            }
+        }
+
+        // Set today's date as default
+        document.getElementById('attendanceDate').valueAsDate = new Date();
+
+        // Initialize home page stats
+        updateHomeStats();
+
+        // Add/Edit Cadet Form Submit
+        document.getElementById('addCadetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('cadetName').value;
+            const year = document.getElementById('year').value;
+            const rank = document.getElementById('rank').value;
+            const editingId = document.getElementById('editingCadetId').value;
+
+            if (editingId) {
+                // Edit mode
+                const cadetIndex = cadets.findIndex(c => c.id == editingId);
+                if (cadetIndex !== -1) {
+                    cadets[cadetIndex].name = name;
+                    cadets[cadetIndex].year = year;
+                    cadets[cadetIndex].rank = rank;
+
+                    alert('Cadet updated successfully!');
+                }
+            } else {
+                // Add mode
+                cadets.push({
+                    id: Date.now(),
+                    name: name,
+                    year: year,
+                    rank: rank,
+                    createdAt: new Date().toISOString()
+                });
+
+                alert('Cadet added successfully!');
+            }
+
+            saveData();
+            this.reset();
+            cancelEdit(); // Reset form to add mode
+            displayCadets();
+            updateAttendanceList();
+        });
+
+        function displayCadets() {
+            const container = document.getElementById('cadetsList');
+
+            if (cadets.length === 0) {
+                container.innerHTML = '<div class="empty-state">No cadets added yet.</div>';
+                return;
+            }
+
+            // Separate cadets by year
+            const firstYearCadets = cadets.filter(cadet => cadet.year === '1st Year');
+            const secondYearCadets = cadets.filter(cadet => cadet.year === '2nd Year');
+
+            // Sort function - alphabetical by name
+            const sortCadets = (cadets) => {
+                return [...cadets].sort((a, b) => a.name.localeCompare(b.name));
+            };
+
+            const sortedFirstYear = sortCadets(firstYearCadets);
+            const sortedSecondYear = sortCadets(secondYearCadets);
+
+            const createCadetTable = (cadets, yearTitle) => {
+                if (cadets.length === 0) {
+                    return `<div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; text-align: center; color: #666;">No ${yearTitle} cadets found.</div>`;
+                }
+
+                return `
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #667eea; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #667eea; font-size: 1em;">${yearTitle} Cadets (${cadets.length})</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Rank</th>
+                                    <th>Present Days</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${cadets.map(cadet => {
+                                    const cadetRecords = attendanceRecords.filter(r => r.cadetId === cadet.id && r.present);
+                                    const presentCount = cadetRecords.length;
+
+                                    return `
+                                    <tr>
+                                        <td>${cadet.name}</td>
+                                        <td>${cadet.rank || 'Cadet'}</td>
+                                        <td>
+                                            <span style="font-weight: 600; color: #27ae60;">${presentCount}</span>
+                                            ${presentCount > 0 ? `<button onclick="showCadetDetails(${cadet.id})" style="margin-left: 6px; padding: 2px 5px; font-size: 0.7em; background: #3498db; color: white; border: none; border-radius: 3px; cursor: pointer;">View Dates</button>` : ''}
+                                        </td>
+                                        <td>
+                                            <button onclick="editCadet(${cadet.id})" style="padding: 4px 8px; font-size: 0.8em; margin-right: 3px;">Edit</button>
+                                            <button class="delete-btn" onclick="deleteCadet(${cadet.id})" style="padding: 4px 8px; font-size: 0.8em;">Delete</button>
+                                        </td>
+                                    </tr>
+                                `}).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            };
+
+            container.innerHTML = `
+                ${createCadetTable(sortedFirstYear, '1st Year')}
+                ${createCadetTable(sortedSecondYear, '2nd Year')}
+            `;
+        }
+
+        function deleteCadet(id) {
+            if (confirm('Delete this cadet? This will also delete all their attendance records.')) {
+                cadets = cadets.filter(c => c.id !== id);
+                attendanceRecords = attendanceRecords.filter(r => r.cadetId !== id);
+                saveData();
+                displayCadets();
+                updateAttendanceList();
+            }
+        }
+
+        function editCadet(id) {
+            const cadet = cadets.find(c => c.id === id);
+            if (cadet) {
+                document.getElementById('cadetName').value = cadet.name;
+                document.getElementById('year').value = cadet.year;
+                document.getElementById('rank').value = cadet.rank || 'Cadet';
+                document.getElementById('editingCadetId').value = cadet.id;
+                document.getElementById('submitBtn').textContent = 'Update Cadet';
+                document.getElementById('cancelBtn').style.display = 'inline-block';
+                document.querySelector('h2').textContent = '👥 Edit Cadet';
+
+                // Scroll to form
+                document.getElementById('addCadetForm').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function cancelEdit() {
+            document.getElementById('addCadetForm').reset();
+            document.getElementById('editingCadetId').value = '';
+            document.getElementById('submitBtn').textContent = 'Add Cadet';
+            document.getElementById('cancelBtn').style.display = 'none';
+            document.querySelector('h2').textContent = '👥 Add/Edit Cadet';
+        }
+
+        function showCadetDetails(cadetId) {
+            const cadet = cadets.find(c => c.id === cadetId);
+            if (!cadet) return;
+
+            const cadetRecords = attendanceRecords.filter(r => r.cadetId === cadet.id);
+            const presentRecords = cadetRecords.filter(r => r.present);
+            const absentRecords = cadetRecords.filter(r => !r.present);
+
+            // Create modal content
+            const modalContent = `
+                <div class="modal-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 20px; border-radius: 10px; max-width: 90%; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 12px;">
+                            <h3 style="color: #667eea; margin: 0; font-size: 1.1em;">📅 Attendance History: ${cadet.name}</h3>
+                            <button onclick="closeModal(this)" style="background: #e74c3c; color: white; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; font-weight: 600;">✕ Close</button>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 15px;">
+                            <div style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: 700;">${presentRecords.length}</div>
+                                <div style="opacity: 0.9; font-size: 0.8em;">Days Present</div>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: 700;">${absentRecords.length}</div>
+                                <div style="opacity: 0.9; font-size: 0.8em;">Days Absent</div>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: 700;">${cadetRecords.length}</div>
+                                <div style="opacity: 0.9; font-size: 0.8em;">Total Records</div>
+                            </div>
+                        </div>
+
+                        ${presentRecords.length > 0 ? `
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="color: #27ae60; margin-bottom: 8px; font-size: 0.9em;">✅ Days Present:</h4>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                ${presentRecords.sort((a, b) => new Date(a.date) - new Date(b.date)).map(record => {
+                                    const date = new Date(record.date);
+                                    return `<span style="background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 20px; font-size: 0.7em; font-weight: 600;">${date.toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}</span>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        ` : '<div style="text-align: center; color: #666; padding: 15px;">No attendance records found for this cadet.</div>'}
+
+                        ${absentRecords.length > 0 ? `
+                        <div>
+                            <h4 style="color: #e74c3c; margin-bottom: 8px; font-size: 0.9em;">❌ Days Absent:</h4>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                ${absentRecords.sort((a, b) => new Date(a.date) - new Date(b.date)).map(record => {
+                                    const date = new Date(record.date);
+                                    return `<span style="background: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 20px; font-size: 0.7em; font-weight: 600;">${date.toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}</span>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+
+            // Add modal to page
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+        }
+
+        function closeModal(buttonElement) {
+            const modal = buttonElement.closest('.modal-overlay');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        function updateAttendanceList() {
+            updateAttendanceListYear('1st');
+            updateAttendanceListYear('2nd');
+        }
+
+        function updateAttendanceListYear(year) {
+            const date = document.getElementById('attendanceDate').value;
+            const container = document.getElementById(`attendanceList-${year}`);
+
+            const yearCadets = cadets.filter(cadet => cadet.year === `${year} Year`);
+
+            if (yearCadets.length === 0) {
+                container.innerHTML = `<div class="empty-state">No ${year} Year cadets found. Add cadets first.</div>`;
+                return;
+            }
+
+            // Sort cadets alphabetically by name
+            const sortedCadets = [...yearCadets].sort((a, b) => a.name.localeCompare(b.name));
+
+            container.innerHTML = sortedCadets.map(cadet => {
+                const record = attendanceRecords.find(r => r.date === date && r.cadetId === cadet.id);
+                const isPresent = record ? record.present : false;
+                const checkboxId = `checkbox-${year}-${cadet.id}`;
+
+                return `
+                    <div class="cadet-card">
+                        <div class="cadet-info">
+                            <div>
+                                <div class="cadet-name">${cadet.name}</div>
+                            </div>
+                            <span class="cadet-year">${cadet.year}</span>
+                        </div>
+                        <div class="checkbox-wrapper">
+                            <label for="${checkboxId}" style="margin: 0; font-weight: 600; color: #333; font-size: 0.8em;">Present:</label>
+                            <input type="checkbox" id="${checkboxId}" class="custom-checkbox" ${isPresent ? 'checked' : ''}>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function switchAttendanceYear(year) {
+            // Hide all year content
+            document.querySelectorAll('.attendance-year-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            // Show selected year content
+            document.getElementById(`attendance-${year}-tab`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function markAllPresent() {
+            document.querySelectorAll('.custom-checkbox').forEach(cb => cb.checked = true);
+        }
+
+        function markAllPresentYear(year) {
+            document.querySelectorAll(`#attendanceList-${year} .custom-checkbox`).forEach(cb => cb.checked = true);
+        }
+
+        function markAllAbsent() {
+            document.querySelectorAll('.custom-checkbox').forEach(cb => cb.checked = false);
+        }
+
+        function markAllAbsentYear(year) {
+            document.querySelectorAll(`#attendanceList-${year} .custom-checkbox`).forEach(cb => cb.checked = false);
+        }
+
+        function clearSelection() {
+            const date = document.getElementById('attendanceDate').value;
+            cadets.forEach(cadet => {
+                const existing = attendanceRecords.find(r => r.date === date && r.cadetId === cadet.id);
+                if (existing) {
+                    attendanceRecords = attendanceRecords.filter(r => !(r.date === date && r.cadetId === cadet.id));
+                }
+            });
+            saveData();
+            updateAttendanceList();
+        }
+
+        function clearSelectionYear(year) {
+            const date = document.getElementById('attendanceDate').value;
+            const yearCadets = cadets.filter(cadet => cadet.year === `${year} Year`);
+            yearCadets.forEach(cadet => {
+                const existing = attendanceRecords.find(r => r.date === date && r.cadetId === cadet.id);
+                if (existing) {
+                    attendanceRecords = attendanceRecords.filter(r => !(r.date === date && r.cadetId === cadet.id));
+                }
+            });
+            saveData();
+            updateAttendanceListYear(year);
+        }
+
+        function saveAttendance() {
+            const date = document.getElementById('attendanceDate').value;
+
+            if (!date) {
+                alert('Please select a date!');
+                return;
+            }
+
+            // Remove existing records for this date
+            attendanceRecords = attendanceRecords.filter(r => r.date !== date);
+
+            // Add new records for all cadets
+            cadets.forEach(cadet => {
+                const yearPrefix = cadet.year === '1st Year' ? '1st' : '2nd';
+                const checkboxId = `checkbox-${yearPrefix}-${cadet.id}`;
+                const checkbox = document.getElementById(checkboxId);
+
+                if (checkbox) {
+                    attendanceRecords.push({
+                        cadetId: cadet.id,
+                        cadetName: cadet.name,
+                        cadetYear: cadet.year,
+                        date: date,
+                        present: checkbox.checked,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            });
+
+            saveData();
+            alert('Attendance saved successfully!');
+            displayRecords();
+        }
+
+        function displayRecords() {
+            const fromDate = document.getElementById('filterFromDate').value;
+            const toDate = document.getElementById('filterToDate').value;
+            const container = document.getElementById('recordsDisplay');
+
+            let filteredRecords = attendanceRecords;
+
+            if (fromDate) {
+                filteredRecords = filteredRecords.filter(r => r.date >= fromDate);
+            }
+            if (toDate) {
+                filteredRecords = filteredRecords.filter(r => r.date <= toDate);
+            }
+
+            if (filteredRecords.length === 0) {
+                container.innerHTML = '<div class="empty-state">No records found.</div>';
+                return;
+            }
+
+            // Group by date
+            const groupedByDate = {};
+            filteredRecords.forEach(record => {
+                if (!groupedByDate[record.date]) {
+                    groupedByDate[record.date] = [];
+                }
+                groupedByDate[record.date].push(record);
+            });
+
+            container.innerHTML = Object.entries(groupedByDate).map(([date, dateRecords]) => {
+                const dateObj = new Date(date);
+                const presentCount = dateRecords.filter(r => r.present).length;
+                const totalCount = dateRecords.length;
+
+                return `
+                    <div style="margin-bottom: 20px; border: 2px solid #667eea; border-radius: 8px; overflow: hidden;">
+                        <div style="background: #667eea; color: white; padding: 12px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; font-size: 0.9em;">
+                            <span>📅 ${dateObj.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                            <span>Present: ${presentCount}/${totalCount}</span>
+                        </div>
+                        <table style="width: 100%;">
+                            <thead>
+                                <tr style="background: #f9f9f9;">
+                                    <th>Cadet Name</th>
+                                    <th>Year</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${dateRecords.map(record => `
+                                    <tr>
+                                        <td>${record.cadetName}</td>
+                                        <td><span class="cadet-year">${record.cadetYear}</span></td>
+                                        <td>
+                                            <span class="status-badge ${record.present ? 'status-present' : 'status-absent'}">
+                                                ${record.present ? '✓ Present' : '✗ Absent'}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <div style="padding: 12px; background: #f9f9f9; text-align: right;">
+                            <button class="export-btn" onclick="exportDateData('${date}')" style="padding: 6px 12px; font-size: 0.7em;">📥 Export</button>
+                            <button class="delete-btn" onclick="deleteDateRecords('${date}')" style="padding: 6px 12px; font-size: 0.7em; margin-left: 3px;">🗑️ Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterRecords() {
+            displayRecords();
+        }
+
+        function deleteDateRecords(date) {
+            if (confirm(`Delete all attendance records for ${date}?`)) {
+                attendanceRecords = attendanceRecords.filter(r => r.date !== date);
+                saveData();
+                displayRecords();
+            }
+        }
+
+        function exportDateData(date) {
+            const dateRecords = attendanceRecords.filter(r => r.date === date);
+            let csvContent = 'Cadet Name,Year,Rank,Present\n';
+
+            dateRecords.forEach(record => {
+                const cadet = cadets.find(c => c.id === record.cadetId);
+                const rank = cadet ? (cadet.rank || 'Cadet') : 'Cadet';
+                csvContent += `"${record.cadetName}",${record.cadetYear},${rank},${record.present ? 'Yes' : 'No'}\n`;
+            });
+
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
+            element.setAttribute('download', `NCC_Attendance_${date}.csv`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function exportDateRange() {
+            const fromDate = document.getElementById('filterFromDate').value;
+            const toDate = document.getElementById('filterToDate').value;
+
+            if (!fromDate || !toDate) {
+                alert('Please select both From Date and To Date for export.');
+                return;
+            }
+
+            if (fromDate > toDate) {
+                alert('From Date cannot be later than To Date.');
+                return;
+            }
+
+            // Filter records within the date range
+            const rangeRecords = attendanceRecords.filter(r => r.date >= fromDate && r.date <= toDate);
+
+            if (rangeRecords.length === 0) {
+                alert('No records found in the selected date range.');
+                return;
+            }
+
+            // Group records by date
+            const recordsByDate = {};
+            rangeRecords.forEach(record => {
+                if (!recordsByDate[record.date]) {
+                    recordsByDate[record.date] = [];
+                }
+                recordsByDate[record.date].push(record);
+            });
+
+            // Create CSV content
+            let csvContent = 'Date,Cadet Name,Year,Rank,Present\n';
+
+            // Sort dates and add records for each date
+            Object.keys(recordsByDate).sort().forEach(date => {
+                recordsByDate[date].forEach(record => {
+                    const cadet = cadets.find(c => c.id === record.cadetId);
+                    const rank = cadet ? (cadet.rank || 'Cadet') : 'Cadet';
+                    csvContent += `${date},"${record.cadetName}",${record.cadetYear},${rank},${record.present ? 'Yes' : 'No'}\n`;
+                });
+            });
+
+            // Create download
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
+            element.setAttribute('download', `NCC_Attendance_Range_${fromDate}_to_${toDate}.csv`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+
+            alert(`Exported ${rangeRecords.length} records from ${fromDate} to ${toDate}`);
+        }
+
+        function exportAllData() {
+            if (attendanceRecords.length === 0) {
+                alert('No records found to export.');
+                return;
+            }
+
+            // Group records by date
+            const recordsByDate = {};
+            attendanceRecords.forEach(record => {
+                if (!recordsByDate[record.date]) {
+                    recordsByDate[record.date] = [];
+                }
+                recordsByDate[record.date].push(record);
+            });
+
+            // Create CSV content
+            let csvContent = 'Date,Cadet Name,Year,Rank,Present\n';
+
+            // Sort dates and add records for each date
+            Object.keys(recordsByDate).sort().forEach(date => {
+                recordsByDate[date].forEach(record => {
+                    const cadet = cadets.find(c => c.id === record.cadetId);
+                    const rank = cadet ? (cadet.rank || 'Cadet') : 'Cadet';
+                    csvContent += `${date},"${record.cadetName}",${record.cadetYear},${rank},${record.present ? 'Yes' : 'No'}\n`;
+                });
+            });
+
+            // Get date range for filename
+            const allDates = Object.keys(recordsByDate).sort();
+            const fromDate = allDates[0];
+            const toDate = allDates[allDates.length - 1];
+
+            // Create download
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
+            element.setAttribute('download', `NCC_Attendance_All_Data_${fromDate}_to_${toDate}.csv`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+
+            alert(`Exported all ${attendanceRecords.length} records from ${fromDate} to ${toDate}`);
+        }
+
+        function exportSummary() {
+            if (attendanceRecords.length === 0) {
+                alert('No records found to export.');
+                return;
+            }
+
+            // Calculate summary statistics
+            const totalRecords = attendanceRecords.length;
+            const presentRecords = attendanceRecords.filter(r => r.present).length;
+            const absentRecords = totalRecords - presentRecords;
+            const attendanceRate = ((presentRecords / totalRecords) * 100).toFixed(2);
+
+            // Get unique dates
+            const uniqueDates = [...new Set(attendanceRecords.map(r => r.date))].sort();
+            const totalDays = uniqueDates.length;
+
+            // Calculate per-cadet statistics
+            const cadetStats = {};
+            cadets.forEach(cadet => {
+                const cadetRecords = attendanceRecords.filter(r => r.cadetId === cadet.id);
+                const cadetPresent = cadetRecords.filter(r => r.present).length;
+                cadetStats[cadet.name] = {
+                    name: cadet.name,
+                    year: cadet.year,
+                    rank: cadet.rank || 'Cadet',
+                    totalRecords: cadetRecords.length,
+                    present: cadetPresent,
+                    absent: cadetRecords.length - cadetPresent,
+                    attendanceRate: cadetRecords.length > 0 ? ((cadetPresent / cadetRecords.length) * 100).toFixed(2) : 0
+                };
+            });
+
+            // Create CSV content
+            let csvContent = 'NCC Attendance Summary Report\n';
+            csvContent += `Generated on,${new Date().toLocaleDateString('en-GB')}\n\n`;
+
+            csvContent += 'Overall Statistics\n';
+            csvContent += `Total Records,${totalRecords}\n`;
+            csvContent += `Present Days,${presentRecords}\n`;
+            csvContent += `Absent Days,${absentRecords}\n`;
+            csvContent += `Overall Attendance Rate,${attendanceRate}%\n`;
+            csvContent += `Total Days with Records,${totalDays}\n\n`;
+
+            csvContent += 'Cadet Performance Summary\n';
+            csvContent += 'Cadet Name,Year,Rank,Total Records,Present,Absent,Attendance Rate (%)\n';
+
+            Object.keys(cadetStats).sort((a, b) => a.localeCompare(b)).forEach(name => {
+                const stat = cadetStats[name];
+                csvContent += `"${stat.name}",${stat.year},${stat.rank},${stat.totalRecords},${stat.present},${stat.absent},${stat.attendanceRate}\n`;
+            });
+
+            csvContent += '\nDaily Summary\n';
+            csvContent += 'Date,Total Cadets Present,Total Records,Attendance Rate (%)\n';
+
+            uniqueDates.forEach(date => {
+                const dateRecords = attendanceRecords.filter(r => r.date === date);
+                const datePresent = dateRecords.filter(r => r.present).length;
+                const dateRate = ((datePresent / dateRecords.length) * 100).toFixed(2);
+                csvContent += `${date},${datePresent},${dateRecords.length},${dateRate}\n`;
+            });
+
+            // Create download
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
+            element.setAttribute('download', `NCC_Attendance_Summary_${new Date().toISOString().split('T')[0]}.csv`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+
+            alert('Attendance summary report exported successfully!');
+        }
+
+        function displayDaysOverview() {
+            const container = document.getElementById('daysOverview');
+
+            if (attendanceRecords.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #999; padding: 15px;">No attendance records found.</div>';
+                return;
+            }
+
+            // Get unique dates and sort them
+            const uniqueDates = [...new Set(attendanceRecords.map(r => r.date))].sort();
+
+            if (uniqueDates.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #999; padding: 15px;">No dates with records found.</div>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div style="margin-bottom: 12px;">
+                    <strong style="color: #667eea;">Total Days with Attendance Records: ${uniqueDates.length}</strong>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    ${uniqueDates.map(date => {
+                        const dateRecords = attendanceRecords.filter(r => r.date === date);
+                        const presentCount = dateRecords.filter(r => r.present).length;
+                        const totalCount = dateRecords.length;
+                        const dateObj = new Date(date);
+
+                        return `
+                            <div style="background: white; border: 2px solid #667eea; border-radius: 8px; padding: 10px; min-width: 150px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="font-weight: 600; color: #667eea; margin-bottom: 3px; font-size: 0.8em;">
+                                    ${dateObj.toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })}
+                                </div>
+                                <div style="font-size: 0.7em; color: #666;">
+                                    ${dateObj.getFullYear()}
+                                </div>
+                                <div style="margin-top: 6px; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-weight: 600;">${presentCount}/${totalCount}</span>
+                                    <div style="width: 50px; height: 3px; background: #eee; border-radius: 2px; overflow: hidden;">
+                                        <div style="width: ${totalCount > 0 ? (presentCount / totalCount) * 100 : 0}%; height: 100%; background: #27ae60;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function displayStats() {
+            displayDaysOverview();
+
+            const container = document.getElementById('statsDisplay');
+
+            if (attendanceRecords.length === 0) {
+                container.innerHTML = '<div class="empty-state">No records available for statistics.</div>';
+                return;
+            }
+
+            const totalRecords = attendanceRecords.length;
+            const presentCount = attendanceRecords.filter(r => r.present).length;
+            const absentCount = totalRecords - presentCount;
+            const attendancePercentage = ((presentCount / totalRecords) * 100).toFixed(2);
+
+            const uniqueDates = [...new Set(attendanceRecords.map(r => r.date))];
+            const cadetStats = {};
+
+            cadets.forEach(cadet => {
+                const cadetRecords = attendanceRecords.filter(r => r.cadetId === cadet.id);
+                const cadetPresent = cadetRecords.filter(r => r.present).length;
+                cadetStats[cadet.id] = {
+                    name: cadet.name,
+                    year: cadet.year,
+                    total: cadetRecords.length,
+                    present: cadetPresent,
+                    percentage: cadetRecords.length > 0 ? ((cadetPresent / cadetRecords.length) * 100).toFixed(2) : 0
+                };
+            });
+
+            // Separate stats for 1st and 2nd year cadets
+            const firstYearCadets = cadets.filter(c => c.year === '1st Year');
+            const secondYearCadets = cadets.filter(c => c.year === '2nd Year');
+
+            const firstYearStats = { total: 0, present: 0 };
+            const secondYearStats = { total: 0, present: 0 };
+
+            firstYearCadets.forEach(cadet => {
+                const stat = cadetStats[cadet.id];
+                if (stat) {
+                    firstYearStats.total += stat.total;
+                    firstYearStats.present += stat.present;
+                }
+            });
+
+            secondYearCadets.forEach(cadet => {
+                const stat = cadetStats[cadet.id];
+                if (stat) {
+                    secondYearStats.total += stat.total;
+                    secondYearStats.present += stat.present;
+                }
+            });
+
+            const firstYearRate = firstYearStats.total > 0 ? ((firstYearStats.present / firstYearStats.total) * 100).toFixed(2) : 0;
+            const secondYearRate = secondYearStats.total > 0 ? ((secondYearStats.present / secondYearStats.total) * 100).toFixed(2) : 0;
+
+            container.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Records</div>
+                        <div class="stat-value">${totalRecords}</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%);">
+                        <div class="stat-label">Present Days</div>
+                        <div class="stat-value">${presentCount}</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
+                        <div class="stat-label">Absent Days</div>
+                        <div class="stat-value">${absentCount}</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);">
+                        <div class="stat-label">Attendance Rate</div>
+                        <div class="stat-value">${attendancePercentage}%</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                    <h3 style="color: #667eea; margin-bottom: 12px; font-size: 1em;">🎖️ Year-wise Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
+                            <div class="stat-label">1st Year Cadets</div>
+                            <div class="stat-value">${firstYearCadets.length}</div>
+                            <div style="font-size: 0.7em; opacity: 0.9;">Attendance: ${firstYearRate}%</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
+                            <div class="stat-label">2nd Year Cadets</div>
+                            <div class="stat-value">${secondYearCadets.length}</div>
+                            <div style="font-size: 0.7em; opacity: 0.9;">Attendance: ${secondYearRate}%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                    <h3 style="color: #667eea; margin-bottom: 12px; font-size: 1em;">📊 Cadet Performance</h3>
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Cadet Name</th>
+                                <th>Year</th>
+                                <th>Total Records</th>
+                                <th>Present</th>
+                                <th>Attendance Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.values(cadetStats).filter(s => s.total > 0).sort((a, b) => a.name.localeCompare(b.name)).map(stat => `
+                                <tr>
+                                    <td>${stat.name}</td>
+                                    <td><span class="cadet-year">${stat.year}</span></td>
+                                    <td>${stat.total}</td>
+                                    <td>${stat.present}</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div style="flex: 1; height: 3px; background: #eee; border-radius: 2px; overflow: hidden;">
+                                                <div style="width: ${stat.percentage}%; height: 100%; background: #667eea;"></div>
+                                            </div>
+                                            ${stat.percentage}%
+                                        </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function updateHomeStats() {
+            // Update total cadets count
+            document.getElementById('totalCadets').textContent = cadets.length;
+
+            // Update today's attendance
+            const today = new Date().toISOString().split('T')[0];
+            const todayRecords = attendanceRecords.filter(r => r.date === today);
+            if (todayRecords.length > 0) {
+                const presentCount = todayRecords.filter(r => r.present).length;
+                const totalCount = todayRecords.length;
+                document.getElementById('todayAttendance').textContent = `${presentCount}/${totalCount}`;
+            } else {
+                document.getElementById('todayAttendance').textContent = 'Not taken';
+            }
+
+            // Update overall attendance rate
+            if (attendanceRecords.length > 0) {
+                const presentCount = attendanceRecords.filter(r => r.present).length;
+                const rate = ((presentCount / attendanceRecords.length) * 100).toFixed(1);
+                document.getElementById('overallRate').textContent = `${rate}%`;
+            } else {
+                document.getElementById('overallRate').textContent = 'N/A';
+            }
+
+            // Update rank panel
+            updateRankPanel();
+        }
+
+        function updateRankPanel() {
+            const rankPanel = document.getElementById('rankPanel');
+            const rankCounts = {};
+
+            // Count cadets by rank
+            cadets.forEach(cadet => {
+                const rank = cadet.rank || 'Cadet';
+                if (!rankCounts[rank]) {
+                    rankCounts[rank] = { count: 0, cadets: [] };
+                }
+                rankCounts[rank].count++;
+                rankCounts[rank].cadets.push(cadet);
+            });
+
+            // Define rank hierarchy for sorting (excluding Cadet rank)
+            const rankOrder = ['Lance Corporal', 'Corporal', 'Sergeant', 'Company Sergeant Major', 'Junior Under Officer', 'Senior Under Officer'];
+
+            // Create rank panels
+            const rankHtml = rankOrder.filter(rank => rankCounts[rank]).map(rank => {
+                const data = rankCounts[rank];
+                const rankColors = {
+                    'Cadet': '#6c757d',
+                    'Lance Corporal': '#28a745',
+                    'Corporal': '#007bff',
+                    'Sergeant': '#fd7e14',
+                    'Company Sergeant Major': '#dc3545',
+                    'Junior Under Officer': '#6f42c1',
+                    'Senior Under Officer': '#e83e8c'
+                };
+
+                return `
+                    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 3px solid ${rankColors[rank] || '#6c757d'}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <h4 style="margin: 0; color: ${rankColors[rank] || '#6c757d'}; font-weight: 600; font-size: 0.9em;">${rank}</h4>
+                            <span style="background: ${rankColors[rank] || '#6c757d'}; color: white; padding: 2px 6px; border-radius: 12px; font-size: 0.7em; font-weight: 600;">${data.count}</span>
+                        </div>
+                        <div style="font-size: 0.7em; color: #666;">
+                            ${data.cadets.slice(0, 3).map(c => c.name).join(', ')}${data.cadets.length > 3 ? '...' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            rankPanel.innerHTML = rankHtml || '<p style="text-align: center; color: #666; font-style: italic;">No cadets registered yet</p>';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`${tab}-tab`).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tab === 'home') {
+                updateHomeStats();
+            } else if (tab === 'record') {
+                updateAttendanceList();
+            } else if (tab === 'view') {
+                filterRecords();
+            } else if (tab === 'stats') {
+                displayStats();
+            }
+        }
+
+        document.getElementById('attendanceDate').addEventListener('change', updateAttendanceList);
+
+        async function saveData() {
+            try {
+                // Save to localStorage
+                localStorage.setItem('nccCadets', JSON.stringify(cadets));
+                localStorage.setItem('nccAttendance', JSON.stringify(attendanceRecords));
+                console.log('Data saved to localStorage');
+
+                updateHomeStats();
+            } catch (error) {
+                console.error('Error saving data:', error);
+                alert('Error saving data to local storage.');
+            }
+        }
+
+        // Initial load - check login status
+        checkLogin();
+    </script>
+
+    <footer style="text-align: center; padding: 15px; background: #f8f9fa; color: #666; font-size: 0.8em; border-top: 1px solid #eee;">
+        Designed by SGT.SAKSHAM
+    </footer>
+</body>
+</html>
